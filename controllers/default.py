@@ -41,18 +41,6 @@ def getSummonerID(summonerName):
 
 
 
-
-@auth.requires_login()
-def post():
-    
-    
-    
-    
-    return dict(form=SQLFORM(db.comment_post).process(),
-                comments=db(db.comment_post).select())
-
-
-
 def canReview(mySummonerID, anotherSummoner):
      
      
@@ -92,6 +80,18 @@ def canReview(mySummonerID, anotherSummoner):
                 continue
       
     return canBeReviewed
+
+#i simple can't understand why this function causes an unknown ticket to be issued every time, but it wasn't the most important thing
+@auth.requires_login
+def validation():
+    mySummonerID = auth.user['summoner']
+    runesURL = "https://na.api.pvp.net/api/lol/na/v1.4/summoner/"+mySummonerID+"/runes?api_key=97ef62ee-275d-48ed-baa4-d8f5538eb5de"
+    response = urllib.urlopen(summonerSummaryURL)
+    summonerSummary = json.loads(response.read())
+
+    testObject = ""# summonerSummary.values[0]""
+
+    return dict(testObject=testObject)    
 
 
 def getWL(mySummonerID):

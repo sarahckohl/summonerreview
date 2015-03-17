@@ -136,3 +136,7 @@ success!
 timestamp: 2015-03-17T11:26:41.244000
 ALTER TABLE revision2 ADD reviewer CHAR(512);
 success!
+success!
+success!
+success!
+success!

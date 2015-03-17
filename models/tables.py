@@ -15,10 +15,7 @@ db.define_table('pagetable', # Name 'page' is reserved unfortunately.
 db.define_table('revision2',
     # Complete!
     Field('rev_id', db.pagetable),
-    Field('author'),
-    Field('rev_date', 'datetime', default=datetime.utcnow(), writable=False),
     Field('body', 'text'),
-    Field('com', 'text'),
     Field('recommended', 'boolean'),
     Field('reviewer', 'string')
     )
