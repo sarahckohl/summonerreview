@@ -1,0 +1,23 @@
+{{left_sidebar_enabled,right_sidebar_enabled=False,('message' in globals())}}
+{{extend 'layout.html'}}
+
+<h1>Revisions</h1>
+{{=A('Back to Index', _class='btn', _href=URL('default', 'index'))}}
+{{=A('Back', _class='btn', _href=URL('default', 'index', args=[title]))}}
+
+<table>
+<tr>
+    <th>Name</th>
+    <th>Date</th>
+    <th>Comment</th>
+</tr>
+{{for i in r:}}
+<tr>
+<td>{{=i.author}}</td>
+<td>{{=i.rev_date}}</td>
+<td>{{=i.com}}</td>
+<td>{{=A('Revert to this revision', _class = 'btn', _href = URL('default','revert',args=[i.id]))}}</td>
+
+</tr>
+{{pass}}
+</table>

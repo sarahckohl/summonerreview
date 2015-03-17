@@ -1,0 +1,132 @@
+timestamp: 2015-03-11T20:08:25.441000
+CREATE TABLE auth_user(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    first_name CHAR(128),
+    last_name CHAR(128),
+    email CHAR(512),
+    password CHAR(512),
+    registration_key CHAR(512),
+    reset_password_key CHAR(512),
+    registration_id CHAR(512)
+);
+success!
+timestamp: 2015-03-11T20:08:25.519000
+CREATE TABLE auth_group(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    role CHAR(512),
+    description TEXT
+);
+success!
+timestamp: 2015-03-11T20:08:25.568000
+CREATE TABLE auth_membership(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    group_id INTEGER REFERENCES auth_group (id) ON DELETE CASCADE
+);
+success!
+timestamp: 2015-03-11T20:08:25.618000
+CREATE TABLE auth_permission(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    group_id INTEGER REFERENCES auth_group (id) ON DELETE CASCADE,
+    name CHAR(512),
+    table_name CHAR(512),
+    record_id INTEGER
+);
+success!
+timestamp: 2015-03-11T20:08:25.667000
+CREATE TABLE auth_event(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    time_stamp TIMESTAMP,
+    client_ip CHAR(512),
+    user_id INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    origin CHAR(512),
+    description TEXT
+);
+success!
+timestamp: 2015-03-11T20:08:25.717000
+CREATE TABLE auth_cas(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    created_on TIMESTAMP,
+    service CHAR(512),
+    ticket CHAR(512),
+    renew CHAR(1)
+);
+success!
+timestamp: 2015-03-11T20:08:25.787000
+CREATE TABLE pagetable(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT
+);
+success!
+timestamp: 2015-03-11T20:08:25.833000
+CREATE TABLE revision(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    reference_id INTEGER REFERENCES pagetable (id) ON DELETE CASCADE,
+    author INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    revTime TIMESTAMP,
+    body TEXT
+);
+success!
+timestamp: 2015-03-11T20:08:25.883000
+CREATE TABLE testpage(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    body TEXT
+);
+success!
+timestamp: 2015-03-15T19:43:48.594000
+CREATE TABLE item(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    votes INTEGER
+);
+success!
+timestamp: 2015-03-15T20:17:18.184000
+CREATE TABLE item(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    image CHAR(512),
+    votes INTEGER
+);
+success!
+timestamp: 2015-03-15T20:39:58.247000
+ALTER TABLE item ADD image CHAR(512);
+success!
+timestamp: 2015-03-15T22:20:23.351000
+CREATE TABLE summoner(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    positive INTEGER,
+    total INTEGER
+);
+success!
+timestamp: 2015-03-16T13:40:25.478000
+CREATE TABLE comment_post(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    body TEXT,
+    is_active CHAR(1),
+    created_on TIMESTAMP,
+    created_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    modified_on TIMESTAMP,
+    modified_by INTEGER REFERENCES auth_user (id) ON DELETE CASCADE
+);
+success!
+timestamp: 2015-03-16T21:05:01.228000
+CREATE TABLE summonertable(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT
+);
+success!
+timestamp: 2015-03-16T21:05:01.357000
+ALTER TABLE comment_post ADD reference_id INTEGER REFERENCES pagetable (id) ON DELETE CASCADE;
+success!
+timestamp: 2015-03-16T22:36:51.291000
+ALTER TABLE auth_user ADD summoner CHAR(512);
+success!
+timestamp: 2015-03-17T04:25:14.902000
+CREATE TABLE revision2(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    rev_id INTEGER REFERENCES pagetable (id) ON DELETE CASCADE,
+    author CHAR(512),
+    rev_date TIMESTAMP,
+    body TEXT,
+    com TEXT
+);
+success!
