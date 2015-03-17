@@ -330,7 +330,7 @@ def index():
                                   label='Content'
                                 ))
 
-        if form.process().accepted:
+        if form.process(formname='reviewForm').accepted:
             db.revision2.insert(rev_id=page_id, body=form.vars.body)
             redirect(URL('default', 'index', args=[title]))      
         
@@ -356,14 +356,6 @@ def index():
 #             # and we go out of edit mode.
 #             redirect(URL('default', 'index',args=[title]))
         content = form
-     
-     
-     
-        
-    #page=db.pagetable(db.pagetable.title==title)
-    page_id=page.id
-    r = db(db.revision2.rev_id==page_id).select(orderby=~db.revision2.rev_date)
-    #return dict(title=title, r=r)   
 
 
 
