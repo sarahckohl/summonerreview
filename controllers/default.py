@@ -8,7 +8,7 @@ import re
 
 
 
-def welcome():
+def index():
     searchBar = SQLFORM.factory(
                                 Field('body', 'string', default="Type a summoner name.", label='Seach'))    
     
@@ -21,7 +21,7 @@ def welcome():
 #             redirect(URL('default', 'index',args=[searchBar.vars.body]))
 #         else:
 #             session.flash=T("Summoner not found.")
-        redirect(URL('default', 'index',args=[searchBar.vars.body]))
+        redirect(URL('default', 'summoner',args=[searchBar.vars.body]))
         
     return dict(searchBar=searchBar)
 
@@ -51,15 +51,6 @@ def post():
     return dict(form=SQLFORM(db.comment_post).process(),
                 comments=db(db.comment_post).select())
 
-
-
-
-def history():
-    title=request.args[0]
-    page=db.pagetable(db.pagetable.title==title)
-    page_id=page.id
-    r = db(db.revision2.rev_id==page_id).select(orderby=~db.revision2.rev_date)
-    return dict(title=title, r=r)
 
 
 def canReview(mySummonerID, anotherSummoner):
@@ -153,7 +144,7 @@ def countStreak(mySummonerID):
 summoner = str(request.args(0)) or None
 
 @auth.requires_login() 
-def index():    
+def summoner():    
     #eventually will want to use this as a cosnt instead of the hard-coded ones, but it's fine for designing since they give the request URLS on the website
     APIkey = "97ef62ee-275d-48ed-baa4-d8f5538eb5de"
     
@@ -173,7 +164,7 @@ def index():
     
     
     if mySummonerID == None:
-        redirect(URL('default', 'welcome')) 
+        redirect(URL('default', 'index')) 
     
     
     
@@ -281,7 +272,7 @@ def index():
 #             redirect(URL('default', 'index',args=[searchBar.vars.body]))
 #         else:
 #             session.flash=T("Summoner not found.")
-        redirect(URL('default', 'index',args=[searchBar.vars.body]))
+        redirect(URL('default', 'summoner',args=[searchBar.vars.body]))
     "End of search-bar logic"
     
     
@@ -314,7 +305,7 @@ def index():
 
         if form.process(formname='reviewForm').accepted:
             db.revision2.insert(rev_id=page_id, body=form.vars.body, reviewer=auth.user['summoner'], recommended=form.vars.Recommended)
-            redirect(URL('default', 'index', args=[title]))      
+            redirect(URL('default', 'summoner', args=[title]))      
         
 #         form = SQLFORM.factory(
 #                                Field('recommend', type='boolean'),

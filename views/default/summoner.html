@@ -1,0 +1,70 @@
+{{left_sidebar_enabled,right_sidebar_enabled=False,('message' in globals())}}
+{{extend 'layout.html'}}
+<!-- issues linking from static, will host off-site for now -->
+
+{{URL('static', 'applications/SummonerReview/static/images/SummonerReview.png')}}
+{{=searchBar}}
+
+<div>
+<br>
+<h1>
+<font size="10">{{=display_title}}</font>
+{{if summonerisHotStreak:}}
+{{=A(IMG(_src=URL('static','images/hotstreak.png'), _alt="on fire!"))}}
+{{pass}}
+</h1>
+
+<br>
+{{if summonerTier==None:}}
+<font size="6">Unranked</font> <br><br>
+{{else:}}
+<font size="6">{{=summonerTier}} {{=summonerDivision}}</font> <br><br>
+{{pass}} 
+<font size="7" color="green">{{=RankedWins}}</font><font size="7">:</font><font size="7" color="red">{{=RankedLosses}}</font> <br><br>
+
+{{if not streakType:}}
+<font color="green">{{=streakType}} streak: {{=streakLength}}</font>
+{{else:}}
+<font color="red">{{=streakType}} streak: {{=streakLength}}</font>
+{{pass}}
+<br>
+
+{{if summonerMiniSeries:}} 
+Up for promotion!<br>
+{{else:}}
+Not up for promotion.<br>
+{{pass}}
+<br> 
+
+{{=canReviewString}} <br>
+
+
+
+
+</tr>
+{{pass}}
+</table>
+
+{{for comment in reversed(testObject):}}
+<br><br>
+{{if comment.recommended:}}
+{{=A(IMG(_src=URL('static','images/thumbup.png'), _alt="Cool", _height="2%", _width="2%"))}}
+{{else:}}
+{{=A(IMG(_src=URL('static','images/thumbdown.png'), _alt="Bad", _height="2%", _width="2%"))}}
+{{pass}}
+
+
+ {{=comment.reviewer}} said: <br>
+{{=comment.body}}<br>
+{{pass}}
+
+
+<br><br>
+{{if editing:}}
+{{=content}}
+{{else:}}
+{{=represent_wiki(content)}}
+{{if userCanReview:}}
+<p>{{=A('Edit', _class='btn', _href=URL('default', 'summoner', args=[title], vars=dict(edit='true')))}}</p>
+{{pass}}
+{{pass}}
