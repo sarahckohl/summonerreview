@@ -46,7 +46,7 @@ Not up for promotion.<br>
 </table>
 
 {{for comment in reversed(testObject):}}
-{{=comment.body}}<br>
+{{=comment.body}} {{=comment.recommended}} by {{=comment.reviewer}}<br>
 {{pass}}
 
 

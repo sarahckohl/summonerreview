@@ -286,10 +286,6 @@ def index():
     
     
     
-    
-    
-    
-    
     page = db(db.pagetable.title == title).select().first()
     if page is None:
         db.pagetable.insert(title=title)
@@ -297,22 +293,6 @@ def index():
         page_id = page.id
     else:
         page_id = page.id 
-    
-    ##if request.args(0) contains a page title...
-    ##lookup that page,
-    ## lookup the most recent revision, and display it
-    rev = db(db.revision.reference_id == page_id).select(orderby=~db.revision.revTime).first() #EET VERKS!
-    #db.revision.insert(page_id=page_id, body=form.vars.body)
-    
-    #r= db.revision(1)
-    s= rev.body if rev is not None else ''  #SO DAHS THEES
-    
-    
-    
-    
-    #if r is None:
-        #db.revision.insert(reference_id=page_id, body=form.vars.body)
-    
 
 
     # Are we editing?
@@ -326,12 +306,14 @@ def index():
         
         print(page_id)
 
-        form = SQLFORM.factory(Field('body', 'text',
-                                  label='Content'
+        form = SQLFORM.factory(
+                                    Field('Recommended', type='boolean'),
+                                    Field('body', 'text',
+                                  label='Review',widget=markitup_widget, default=""
                                 ))
 
         if form.process(formname='reviewForm').accepted:
-            db.revision2.insert(rev_id=page_id, body=form.vars.body)
+            db.revision2.insert(rev_id=page_id, body=form.vars.body, reviewer=auth.user['summoner'], recommended=form.vars.Recommended)
             redirect(URL('default', 'index', args=[title]))      
         
 #         form = SQLFORM.factory(

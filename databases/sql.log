@@ -130,3 +130,9 @@ CREATE TABLE revision2(
     com TEXT
 );
 success!
+timestamp: 2015-03-17T11:25:16.397000
+ALTER TABLE revision2 ADD recommended CHAR(1);
+success!
+timestamp: 2015-03-17T11:26:41.244000
+ALTER TABLE revision2 ADD reviewer CHAR(512);
+success!

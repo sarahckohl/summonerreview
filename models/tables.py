@@ -33,7 +33,9 @@ db.define_table('revision2',
     Field('author'),
     Field('rev_date', 'datetime', default=datetime.utcnow(), writable=False),
     Field('body', 'text'),
-    Field('com', 'text')
+    Field('com', 'text'),
+    Field('recommended', 'boolean'),
+    Field('reviewer', 'string')
     )
 
 
