@@ -46,7 +46,16 @@ Not up for promotion.<br>
 </table>
 
 {{for comment in reversed(testObject):}}
-{{=comment.body}} {{=comment.recommended}} by {{=comment.reviewer}}<br>
+<br><br>
+{{if comment.recommended:}}
+{{=A(IMG(_src=URL('static','images/thumbup.png'), _alt="Cool", _height="2%", _width="2%"))}}
+{{else:}}
+{{=A(IMG(_src=URL('static','images/thumbdown.png'), _alt="Bad", _height="2%", _width="2%"))}}
+{{pass}}
+
+
+ {{=comment.reviewer}} said: <br>
+{{=comment.body}}<br>
 {{pass}}
 
 
