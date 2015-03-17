@@ -13,14 +13,6 @@ def index():
                                 Field('body', 'string', default="Type a summoner name.", label='Seach'))    
     
     if searchBar.process(formname='searchBar').accepted:
-#         url = "https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/"+searchBar.vars.body+"?api_key=97ef62ee-275d-48ed-baa4-d8f5538eb5de"
-#         response = urllib.urlopen(url)
-#         logger.info(response)
-#         #data = json.loads(response.read())
-#         if response.code == 200:
-#             redirect(URL('default', 'index',args=[searchBar.vars.body]))
-#         else:
-#             session.flash=T("Summoner not found.")
         redirect(URL('default', 'summoner',args=[searchBar.vars.body]))
         
     return dict(searchBar=searchBar)
@@ -133,10 +125,6 @@ def countStreak(mySummonerID):
         else:
             streakLength = i+1
             break
-     
-      
-     
-     
     streakType = "Win" if PositiveStreak else "Lose"
     return (streakType, streakLength)
     
@@ -150,7 +138,6 @@ def summoner():
     
     title = request.args(0) or 'main_page' #if request.args(0) is None, show the main wiki page
     summoner = str(request.args(0)) or None
-    #title = request.args(0) == "banana slug"
     form = None
     content = None
     display_title = title.title()
@@ -170,26 +157,6 @@ def summoner():
     
     if summoner:
         display_title = summoner
-    
-    
-   
-        
-    
-    
-    #url = "https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/daitoshokan?api_key=97ef62ee-275d-48ed-baa4-d8f5538eb5de"
-    #response = urllib.urlopen(url)
-    #data = json.loads(response.read())
-    #sid = data['id']
-    #so one thing we'll want to do is validate this string instead of asserting 'fucker'
-    #sid = data.get('daitoshokan', "fucker").get('id', "notmine")
-    #mySummonerID = getSummonerID("잘 못")
-    
-    
-#     theparticipantsURL = "https://na.api.pvp.net/api/lol/na/v2.2/matchhistory/"+getSummonerID(summoner)+"?api_key=97ef62ee-275d-48ed-baa4-d8f5538eb5de"
-#     response = urllib.urlopen(theparticipantsURL)
-#     data = json.loads(response.read())
-#     theparticipants = data.get('matches', None)[0].get('participantIdentities', None)
-
 
  
     "We will probably divide this logic out into at least 1 more function, if not 2 or 3"
@@ -206,7 +173,6 @@ def summoner():
     #Note that the league request can return NULL of the person is unranked!!
     leagueURL = "https://na.api.pvp.net/api/lol/na/v2.5/league/by-summoner/"+mySummonerID+"/entry?api_key=97ef62ee-275d-48ed-baa4-d8f5538eb5de"
     response = urllib.urlopen(leagueURL)
-    
     
     if response.code != 200:
         summonerTier = None
@@ -227,14 +193,7 @@ def summoner():
         summonerMiniSeries = leagueJSON.values()[0][0].get('entries', None)[0].get('miniSeries', None)
      
     "End of league related code"
-     
-     
-#     matchHistoryURL = "https://na.api.pvp.net/api/lol/na/v2.2/matchhistory/"+mySummonerID+"?endIndex=15&api_key=97ef62ee-275d-48ed-baa4-d8f5538eb5de"
-#     response = urllib.urlopen(matchHistoryURL)
-#     matchHistoryJSON = json.loads(response.read())
-#    testObject = matchHistoryJSON.values()[0][0].get('matchId', None)
-     
-     
+
      
     "Streak-related code: find their current win or lose streak"
     streakTuple = countStreak(mySummonerID)
@@ -243,12 +202,10 @@ def summoner():
     "End of Streak related code"
      
      
-     
-     
     "Posting Authorization"
     "This code is to control abuse cases like reviewing people you haven't played with recently.  It currently does only that, but I will eventually"
     "also make it so you can't double post for the same match and things like that."
-    someJerk = auth.user['summoner'] or "daitoshokan"
+    someJerk = auth.user['summoner'] or None
     
     userCanReview = canReview(mySummonerID, someJerk)
     canReviewString = "You ("+someJerk+") can review this summoner!" if userCanReview  else "You ("+someJerk+") can NOT review this summoner!" 
@@ -264,14 +221,6 @@ def summoner():
                                 Field('body', 'string', default="Type a summoner name.", label='Seach'))    
     
     if searchBar.process(formname='searchBar').accepted:
-#         url = "https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/"+searchBar.vars.body+"?api_key=97ef62ee-275d-48ed-baa4-d8f5538eb5de"
-#         response = urllib.urlopen(url)
-#         logger.info(response)
-#         #data = json.loads(response.read())
-#         if response.code == 200:
-#             redirect(URL('default', 'index',args=[searchBar.vars.body]))
-#         else:
-#             session.flash=T("Summoner not found.")
         redirect(URL('default', 'summoner',args=[searchBar.vars.body]))
     "End of search-bar logic"
     
@@ -285,12 +234,8 @@ def summoner():
     else:
         page_id = page.id 
 
-
     # Are we editing?
     editing = request.vars.edit == 'true'
-    # This is how you can use logging, very useful.
-    logger.info("This is a request for page %r, with editing %r" %
-                 (title, editing))
     if editing and userCanReview:
         # We are editing.  Gets the body s of the page.
         # Creates a form to edit the content s, with s as default.
@@ -307,30 +252,7 @@ def summoner():
             db.revision2.insert(rev_id=page_id, body=form.vars.body, reviewer=auth.user['summoner'], recommended=form.vars.Recommended)
             redirect(URL('default', 'summoner', args=[title]))      
         
-#         form = SQLFORM.factory(
-#                                Field('recommend', type='boolean'),
-#                                Field('body', 'text',
-#                                      label='Content',
-#                                      default=s,
-#                                      widget=markitup_widget
-#                                      ))
-#         # You can easily add extra buttons to forms.
-#         form.add_button('Cancel', URL('default', 'index', args=[title]))
-#         # Processes the form.
-#         if form.process(formname='editBox').accepted:
-#             # Writes the new content.
-#             if rev is None:
-#                 # First time: we need to insert it.
-#                 db.revision.insert(reference_id = page_id, body = form.vars.body)
-#             else:
-#                 # We update it.
-#                 rev.update_record(body=form.vars.body)
-#             # We redirect here, so we get this page with GET rather than POST,
-#             # and we go out of edit mode.
-#             redirect(URL('default', 'index',args=[title]))
         content = form
-
-
 
         # We are just displaying the page
         #q=db(db.revision.page_id == page_id) 
@@ -361,10 +283,6 @@ def markitup_widget(field, value):
                     _id="%s_%s" % (field._tablename, field.name),
                     _class='markitup',
                     requires=field.requires)
-
-
-
-
 
 def user():
     """
