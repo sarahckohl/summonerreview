@@ -12,21 +12,6 @@ db.define_table('pagetable', # Name 'page' is reserved unfortunately.
     )
 
 
-db.define_table('summonertable', # Name 'page' is reserved unfortunately.
-    # Complete!
-    Field('title','text'),
-    )
-
-db.define_table('revision',
-    # Complete!
-    Field('reference_id', 'reference pagetable'),
-    Field('author', db.auth_user), #probably not text but a user var
-    Field('revTime','datetime'),
-    Field('body', 'text'), # This is the main content of a revision.
-    
-    )
-
-
 db.define_table('revision2',
     # Complete!
     Field('rev_id', db.pagetable),
@@ -37,26 +22,6 @@ db.define_table('revision2',
     Field('recommended', 'boolean'),
     Field('reviewer', 'string')
     )
-
-
-db.define_table('summoner',
-                Field('positive', type='integer'),
-                Field('total', type='integer')
-                )
-
-
-db.define_table('testpage',
-    # This table is used for testing only.  Don't use it in your code,
-    # but feel free to look at how I use it. 
-    Field('body', 'text'),
-    )
-
-
-
-db.define_table('comment_post',
-                Field('reference_id', 'reference pagetable'),
-                Field('body','text',label='Your comment'),
-   auth.signature)
 
 
 
@@ -85,4 +50,4 @@ def represent_content(v, r):
     return represent_wiki(v)
 
 # We associate the wiki representation with the body of a revision.
-db.revision.body.represent = represent_content
+#db.revision.body.represent = represent_content
