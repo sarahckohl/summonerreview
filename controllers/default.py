@@ -6,7 +6,7 @@ import logging
 import json, urllib
 import re
 
-
+APIKEY = "97ef62ee-275d-48ed-baa4-d8f5538eb5de"
 
 def index():
     searchBar = SQLFORM.factory(
@@ -21,7 +21,7 @@ def index():
 #really,version numbers should probably be made global
 def getSummonerID(summonerName):
     
-    url = "https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/"+summonerName+"?api_key=97ef62ee-275d-48ed-baa4-d8f5538eb5de"
+    url = "https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/"+summonerName+"?api_key="+APIKEY
     response = urllib.urlopen(url)
     
     if response.code != 200:
@@ -36,7 +36,7 @@ def getSummonerID(summonerName):
 def canReview(mySummonerID, anotherSummoner):
      
      
-    matchHistoryURL = "https://na.api.pvp.net/api/lol/na/v2.2/matchhistory/"+mySummonerID+"?endIndex=15&api_key=97ef62ee-275d-48ed-baa4-d8f5538eb5de"
+    matchHistoryURL = "https://na.api.pvp.net/api/lol/na/v2.2/matchhistory/"+mySummonerID+"?endIndex=15&api_key="+APIKEY
     response = urllib.urlopen(matchHistoryURL)
     matchHistoryJSON = json.loads(response.read())
     matchesList = matchHistoryJSON.values()[0]
@@ -57,7 +57,7 @@ def canReview(mySummonerID, anotherSummoner):
        
         "With the MatchID, you can now get match(es)"
        
-        matchDetailsURL = "https://na.api.pvp.net/api/lol/na/v2.2/match/"+str(aMatchID)+"?includeTimeline=false&api_key=97ef62ee-275d-48ed-baa4-d8f5538eb5de"
+        matchDetailsURL = "https://na.api.pvp.net/api/lol/na/v2.2/match/"+str(aMatchID)+"?includeTimeline=false&api_key="+APIKEY
         response = urllib.urlopen(matchDetailsURL)
         matchDetailsJSON = json.loads(response.read())
        
@@ -77,7 +77,7 @@ def canReview(mySummonerID, anotherSummoner):
 @auth.requires_login
 def validation():
     mySummonerID = auth.user['summoner']
-    runesURL = "https://na.api.pvp.net/api/lol/na/v1.4/summoner/"+mySummonerID+"/runes?api_key=97ef62ee-275d-48ed-baa4-d8f5538eb5de"
+    runesURL = "https://na.api.pvp.net/api/lol/na/v1.4/summoner/"+mySummonerID+"/runes?api_key="+APIKEY
     response = urllib.urlopen(summonerSummaryURL)
     summonerSummary = json.loads(response.read())
 
@@ -88,7 +88,7 @@ def validation():
 
 def getWL(mySummonerID):
         #note the season.  as a stretch goal, we could do tabs
-    summonerSummaryURL = "https://na.api.pvp.net/api/lol/na/v1.3/stats/by-summoner/"+mySummonerID+"/summary?season=SEASON2015&api_key=97ef62ee-275d-48ed-baa4-d8f5538eb5de"
+    summonerSummaryURL = "https://na.api.pvp.net/api/lol/na/v1.3/stats/by-summoner/"+mySummonerID+"/summary?season=SEASON2015&api_key="+APIKEY
     response = urllib.urlopen(summonerSummaryURL)
     summonerSummary = json.loads(response.read())
      
@@ -108,7 +108,7 @@ def countStreak(mySummonerID):
     #gets 15 games, which may or may not be ok to do if they have played less than that
     #matchHistoryURL = "https://na.api.pvp.net/api/lol/na/v2.2/matchhistory/"+mySummonerID+"?rankedQueues=RANKED_SOLO_5x5&endIndex=15&api_key=97ef62ee-275d-48ed-baa4-d8f5538eb5de"
     #eventually maybe make this solo, but it's a little easier to test if it's all ranked.  Nevermind, it seems to default to solo and not actually fetch all queues.
-    matchHistoryURL = "https://na.api.pvp.net/api/lol/na/v2.2/matchhistory/"+mySummonerID+"?endIndex=15&api_key=97ef62ee-275d-48ed-baa4-d8f5538eb5de"
+    matchHistoryURL = "https://na.api.pvp.net/api/lol/na/v2.2/matchhistory/"+mySummonerID+"?endIndex=15&api_key="+APIKEY
     response = urllib.urlopen(matchHistoryURL)
     matchHistoryJSON = json.loads(response.read())
     matchesList = matchHistoryJSON.values()[0]
@@ -134,7 +134,6 @@ summoner = str(request.args(0)) or None
 @auth.requires_login() 
 def summoner():    
     #eventually will want to use this as a cosnt instead of the hard-coded ones, but it's fine for designing since they give the request URLS on the website
-    APIkey = "97ef62ee-275d-48ed-baa4-d8f5538eb5de"
     
     title = request.args(0) or 'main_page' #if request.args(0) is None, show the main wiki page
     summoner = str(request.args(0)) or None
@@ -171,7 +170,7 @@ def summoner():
      
     "This block of code will grab a lot of the information about current league standing, including Hotstreak status, miniseries status, etc."
     #Note that the league request can return NULL of the person is unranked!!
-    leagueURL = "https://na.api.pvp.net/api/lol/na/v2.5/league/by-summoner/"+mySummonerID+"/entry?api_key=97ef62ee-275d-48ed-baa4-d8f5538eb5de"
+    leagueURL = "https://na.api.pvp.net/api/lol/na/v2.5/league/by-summoner/"+mySummonerID+"/entry?api_key="+APIKEY
     response = urllib.urlopen(leagueURL)
     
     if response.code != 200:
