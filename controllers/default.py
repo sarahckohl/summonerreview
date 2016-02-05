@@ -73,7 +73,6 @@ def canReview(mySummonerID, anotherSummoner):
       
     return canBeReviewed
 
-#i simple can't understand why this function causes an unknown ticket to be issued every time, but it wasn't the most important thing
 @auth.requires_login
 def validation():
     mySummonerID = auth.user['summoner']
